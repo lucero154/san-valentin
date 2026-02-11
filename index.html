@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Valentín - Mi Amor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #8B1874 0%, #C71585 50%, #8B1874 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Corazones flotantes de fondo */
+        .heart-bg {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 105, 180, 0.3);
+            transform: rotate(45deg);
+            animation: float 8s infinite;
+        }
+
+        .heart-bg:before,
+        .heart-bg:after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 105, 180, 0.3);
+            border-radius: 50%;
+        }
+
+        .heart-bg:before {
+            left: -15px;
+        }
+
+        .heart-bg:after {
+            top: -15px;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-100px) rotate(45deg);
+                opacity: 0.6;
+            }
+        }
+
+        .container {
+            background: linear-gradient(to bottom, #FFE4E1 0%, #FFF5EE 100%);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+        }
+
+        .text-content {
+            color: #8B4513;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .text-content p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .tree-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* Tronco del árbol */
+        .trunk {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(to right, #8B4513, #A0522D);
+            border-radius: 8px;
+        }
+
+        /* Corazones del árbol */
+        .heart {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--heart-color);
+            transform: rotate(45deg);
+            animation: pulse 2s infinite;
+            animation-delay: var(--delay);
+            box-shadow: 0 1px 4px rgba(255, 23, 68, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--heart-color);
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            left: -8px;
+        }
+
+        .heart:after {
+            top: -8px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: rotate(45deg) scale(1);
+            }
+            50% {
+                transform: rotate(45deg) scale(1.05);
+            }
+        }
+
+        /* Animación de caída como pétalos de cerezo */
+        .heart.falling {
+            animation: fallDown var(--fall-duration) ease-in forwards, 
+                       swayFalling var(--sway-duration) ease-in-out infinite;
+            animation-delay: var(--fall-delay);
+            z-index: 100;
+        }
+
+        @keyframes fallDown {
+            0% {
+                opacity: 1;
+                bottom: var(--original-bottom);
+                transform: rotate(45deg) scale(1);
+            }
+            20% {
+                opacity: 0.9;
+            }
+            80% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                bottom: -100px;
+                transform: rotate(405deg) scale(0.7);
+            }
+        }
+
+        @keyframes swayFalling {
+            0%, 100% {
+                left: var(--original-left);
+            }
+            25% {
+                left: calc(var(--original-left) - 40px);
+            }
+            50% {
+                left: var(--original-left);
+            }
+            75% {
+                left: calc(var(--original-left) + 40px);
+            }
+        }
+
+        @keyframes sway {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-40px) rotate(20deg);
+            }
+            50% {
+                transform: translateX(0) rotate(-10deg);
+            }
+            75% {
+                transform: translateX(40px) rotate(15deg);
+            }
+        }
+
+        .counter-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .counter-text {
+            color: #8B4513;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .counter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #C71585;
+            min-width: 50px;
+        }
+
+        .time-label {
+            font-size: 12px;
+            color: #8B4513;
+            margin-top: 5px;
+        }
+
+        /* Corazón pequeño flotante */
+        .floating-heart {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #FF69B4;
+            transform: rotate(45deg);
+            animation: floatUp 3s infinite;
+            bottom: 50px;
+            left: 50%;
+        }
+
+        .floating-heart:before,
+        .floating-heart:after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #FF69B4;
+            border-radius: 50%;
+        }
+
+        .floating-heart:before {
+            left: -7.5px;
+        }
+
+        .floating-heart:after {
+            top: -7.5px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: 20px;
+            color: #8B4513;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Corazones de fondo -->
+    <div class="heart-bg" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+    <div class="heart-bg" style="top: 20%; right: 15%; animation-delay: 2s;"></div>
+    <div class="heart-bg" style="bottom: 30%; left: 20%; animation-delay: 4s;"></div>
+    <div class="heart-bg" style="bottom: 15%; right: 10%; animation-delay: 6s;"></div>
+
+    <div class="container">
+        <div class="text-content">
+            <p><strong>PARA EL HOMBRE QUE ME AMÁ:</strong></p>
+            <p>Pasamos muchas cosas juuntos y yo solo quiero</p>
+            <p>que todo mejore y que ya no haya peleas por</p>
+            <p>problemas o accciones que se pueden solucionar y cambiar </p>
+            <p>TE QUIERO MUCHO SAIR </p>
+        </div>
+
+        <div class="tree-container" id="treeContainer">
+            <div class="trunk"></div>
+        </div>
+
+        <div class="counter-container">
+            <div class="counter-text">Mi amor por ti comenzó y sigue siendo el mismo..</div>
+            <div class="counter">
+                <div class="time-unit">
+                    <div class="time-value" id="days">0</div>
+                    <div class="time-label">días</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="hours">0</div>
+                    <div class="time-label">horas</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="minutes">0</div>
+                    <div class="time-label">minutos</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="seconds">0</div>
+                    <div class="time-label">segundos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-heart"></div>
+        
+        <div class="signature">Hecho con ❤️ para ti</div>
+    </div>
+
+    <script>
+        // Fecha de inicio del amor - Enero 2024
+        const startDate = new Date('2024-01-01T00:00:00');
+
+        // Función para actualizar el contador
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Crear árbol de corazones
+        function createHeartTree() {
+            const container = document.getElementById('treeContainer');
+            const colors = ['#FF1744', '#E91E63', '#F50057', '#FF4081', '#C2185B', '#D81B60', '#FF6B9D', '#FF8FA3', '#FFA5BA', '#FFB3C1'];
+            
+            // Generar forma de corazón perfecta con MUCHOS corazones
+            const heartPositions = [];
+            
+            // Crear múltiples capas de corazones en el contorno
+            for (let layer = 0; layer < 3; layer++) {
+                for (let i = 0; i < 360; i += 4) {
+                    const angle = i * Math.PI / 180;
+                    const x = 16 * Math.pow(Math.sin(angle), 3);
+                    const y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+                    
+                    const scale = 4.5 + layer * 0.3;
+                    heartPositions.push({ 
+                        x: x * scale + (Math.random() - 0.5) * 4, 
+                        y: y * scale + 50 + (Math.random() - 0.5) * 4
+                    });
+                }
+            }
+            
+            // Rellenar completamente el interior con MUCHOS corazones
+            for (let row = -25; row <= 85; row += 7) {
+                let maxWidth;
+                if (row < 0) {
+                    maxWidth = 80 - Math.abs(row) * 2;
+                } else if (row < 40) {
+                    maxWidth = 85;
+                } else {
+                    maxWidth = 30 + (80 - row) * 0.9;
+                }
+                
+                for (let col = -maxWidth; col <= maxWidth; col += 7) {
+                    const normalizedX = col / 4.5;
+                    const normalizedY = (row - 50) / 4.5;
+                    
+                    const inHeart = Math.pow(normalizedX * normalizedX + normalizedY * normalizedY - 1, 3) - 
+                                   normalizedX * normalizedX * normalizedY * normalizedY * normalizedY < 0;
+                    
+                    if (inHeart || Math.random() > 0.05) {
+                        heartPositions.push({ 
+                            x: col + (Math.random() - 0.5) * 5, 
+                            y: row + (Math.random() - 0.5) * 5
+                        });
+                    }
+                }
+            }
+            
+            // Agregar corazones adicionales aleatorios para llenar todos los espacios
+            for (let i = 0; i < 150; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 70;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius + 30;
+                
+                heartPositions.push({ x, y });
+            }
+
+            heartPositions.forEach((pos, index) => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                const colorIndex = Math.floor(Math.random() * colors.length);
+                heart.style.setProperty('--heart-color', colors[colorIndex]);
+                heart.style.setProperty('--delay', `${index * 0.01}s`);
+                
+                const leftValue = `calc(50% + ${pos.x}px)`;
+                const bottomValue = `${pos.y + 80}px`;
+                
+                heart.style.left = leftValue;
+                heart.style.bottom = bottomValue;
+                heart.style.setProperty('--original-left', leftValue);
+                heart.style.setProperty('--original-bottom', bottomValue);
+                
+                heart.dataset.originalLeft = leftValue;
+                heart.dataset.originalBottom = bottomValue;
+                container.appendChild(heart);
+            });
+        }
+
+        // Función para hacer caer corazones aleatoriamente (pétalos cayendo)
+        function makeHeartFall() {
+            const hearts = document.querySelectorAll('.heart:not(.falling)');
+            if (hearts.length === 0) return;
+            
+            const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
+            const fallDuration = 4 + Math.random() * 3; // 4-7 segundos
+            const swayDuration = 1.2 + Math.random() * 0.8; // 1.2-2 segundos
+            const fallDelay = Math.random() * 0.3;
+            
+            randomHeart.style.setProperty('--fall-duration', `${fallDuration}s`);
+            randomHeart.style.setProperty('--sway-duration', `${swayDuration}s`);
+            randomHeart.style.setProperty('--fall-delay', `${fallDelay}s`);
+            randomHeart.classList.add('falling');
+            
+            // Después de que caiga, restaurarlo
+            setTimeout(() => {
+                randomHeart.classList.remove('falling');
+                randomHeart.style.left = randomHeart.dataset.originalLeft;
+                randomHeart.style.bottom = randomHeart.dataset.originalBottom;
+                randomHeart.style.opacity = '1';
+                randomHeart.style.transform = '';
+            }, (fallDuration + fallDelay) * 1000);
+        }
+
+        // Inicializar
+        createHeartTree();
+        updateCounter();
+        setInterval(updateCounter, 1000);
+        
+        // Hacer caer pétalos (corazones) constantemente cada 0.5 segundos
+        setInterval(makeHeartFall, 500);
+        
+        // Iniciar varias caídas inmediatas para efecto inicial dramático
+        setTimeout(() => {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(makeHeartFall, i * 150);
+            }
+        }, 1000);
+
+        // Crear corazones flotantes adicionales
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.querySelector('.container').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 3000);
+        }, 2000);
+    </script>
+</body>
+</html>
